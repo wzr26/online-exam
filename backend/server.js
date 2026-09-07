@@ -23,6 +23,10 @@ app.get("/exams", (req, res) => {
     res.send("Danh sách bài thi");
 });
 
+app.get("/profile", (req, res) => {
+    res.send("Trang cá nhân");
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
