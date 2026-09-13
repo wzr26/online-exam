@@ -3,16 +3,32 @@ const path = require("path");
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
+
 const PORT = 4000;
 
-app.use(express.static(path.join(__dirname, "frontend")));
+app.use(
+    express.static(
+        path.join(__dirname, "..", "frontend")
+    )
+);
 
 app.get("/", (req, res) => {
     res.send("Trang chủ");
 });
 
 app.get("/login", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend", "login.html"));
+   res.sendFile(
+    path.join(__dirname, "..", "frontend", "login.html")
+);
+});
+
+app.post("/login", (req, res) => {
+
+    console.log(req.body);
+
+    res.send("Đã nhận dữ liệu");
+
 });
 
 app.get("/register", (req, res) => {
