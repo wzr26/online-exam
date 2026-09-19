@@ -3,6 +3,17 @@ const path = require("path");
 
 const app = express();
 
+app.use((req, res, next) => {
+
+    console.log("==============");
+    console.log("METHOD:", req.method);
+    console.log("URL:", req.url);
+    console.log("==============");
+
+    next();
+
+});
+
 const PORT = 4000;
 
 // Middleware
@@ -67,10 +78,7 @@ app.get("/exams/:id", (req, res) => {
 
 });
 
-
-
 // Start server
-
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
