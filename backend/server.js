@@ -16,6 +16,21 @@ app.use((req, res, next) => {
 
 const PORT = 4000;
 
+const users = [
+
+    {
+        id: 1,
+        username: "dung",
+        role: "student"
+    },
+
+    {
+        id: 2,
+        username: "teacher",
+        role: "teacher"
+    }
+
+];
 // Middleware
 
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +42,15 @@ app.use(
 );
 
 // Routes
+app.get("/api/profile", (req, res) => {
+
+    res.json({
+        id: 1,
+        username: "dung",
+        role: "student"
+    });
+
+});
 
 app.get("/", (req, res) => {
     res.send("Trang chủ");
@@ -75,6 +99,24 @@ app.get("/exams/:id", (req, res) => {
     const id = req.params.id;
 
     res.send(`Exam ID: ${id}`);
+
+});
+
+app.get("/api/users", (req, res) => {
+
+    res.json(users);
+
+});
+
+app.get("/api/users/:id", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const user = users.find(
+        user => user.id === id
+    );
+
+    res.json(user);
 
 });
 
