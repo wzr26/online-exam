@@ -34,12 +34,21 @@ const users = [
 // Middleware
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(
     express.static(
         path.join(__dirname, "..", "frontend")
     )
 );
+
+app.post("/api/users", (req, res) => {
+
+    console.log(req.body);
+
+    res.json(req.body);
+
+});
 
 // Routes
 app.get("/api/profile", (req, res) => {
@@ -102,6 +111,21 @@ app.get("/exams/:id", (req, res) => {
 
 });
 
+app.post("/api/users", (req, res) => {
+
+    console.log(req.body);
+
+    const newUser = {
+        id: users.length + 1,
+        username: req.body.username,
+        role: req.body.role
+    };
+
+    users.push(newUser);
+
+    res.json(newUser);
+
+});
 app.get("/api/users", (req, res) => {
 
     res.json(users);
@@ -120,6 +144,50 @@ app.get("/api/users/:id", (req, res) => {
 
 });
 
+app.put("/api/users/:id", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const user = users.find(
+        user => user.id === id
+    );
+
+    if (!user) {
+        return res.status(404).json({
+            message: "User not found"
+        });
+    }
+
+    user.username = req.body.username;
+    user.role = req.body.role;
+
+    res.json(user);
+
+});
+
+app.delete("/api/users/:id", (req, res) => {
+
+    const id = Number(req.params.id);
+
+    const index = users.findIndex(
+        user => user.id === id
+    );
+
+    if (index === -1) {
+
+        return res.status(404).json({
+            message: "User not found"
+        });
+
+    }
+
+    users.splice(index, 1);
+
+    res.json({
+        message: "Deleted successfully"
+    });
+
+});
 // Start server
 
 app.listen(PORT, () => {
