@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AuthController {
 
+    @GetMapping("/")
+public String home() {
+    return "Trang chủ";
+}
     @GetMapping("/login")
     public String loginPage() {
         return "Trang đăng nhập";
@@ -26,3 +30,4 @@ public class AuthController {
         return "Trang đăng ký";
     }
 }
+
