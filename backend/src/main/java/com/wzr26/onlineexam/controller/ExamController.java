@@ -4,6 +4,7 @@ import com.wzr26.onlineexam.model.Exam;
 import com.wzr26.onlineexam.model.Question;
 import com.wzr26.onlineexam.service.ExamService;
 import com.wzr26.onlineexam.service.QuestionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,61 +24,118 @@ public class ExamController {
         this.questionService = questionService;
     }
 
+    // EXAMS
+
     @GetMapping
     public List<Exam> getAllExams() {
         return examService.getAllExams();
     }
 
     @GetMapping("/{examId}")
-    public Exam getExamById(
+    public ResponseEntity<Exam> getExamById(
             @PathVariable Long examId
     ) {
-        return examService.getExamById(examId);
+        Exam exam = examService.getExamById(examId);
+
+        if (exam == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(exam);
     }
 
+    // QUESTIONS
+
     @GetMapping("/{examId}/questions")
-    public List<Question> getQuestionsByExamId(
+    public ResponseEntity<List<Question>> getQuestionsByExamId(
             @PathVariable Long examId
     ) {
-        return questionService.getQuestionsByExamId(examId);
+        Exam exam = examService.getExamById(examId);
+
+        if (exam == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(
+                questionService.getQuestionsByExamId(examId)
+        );
     }
 
     @PostMapping("/{examId}/questions")
-    public Question createQuestion(
+    public ResponseEntity<Question> createQuestion(
             @PathVariable Long examId,
             @RequestBody Question question
     ) {
+        Exam exam = examService.getExamById(examId);
+
+        if (exam == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         question.setExamId(examId);
 
-        return questionService.createQuestion(question);
+        Question newQuestion =
+                questionService.createQuestion(question);
+
+        return ResponseEntity.ok(newQuestion);
     }
 
     @PutMapping("/{examId}/questions/{questionId}")
-    public Question updateQuestion(
+    public ResponseEntity<Question> updateQuestion(
             @PathVariable Long examId,
             @PathVariable Long questionId,
             @RequestBody Question question
     ) {
+
+        // Check exam exists
+        Exam exam = examService.getExamById(examId);
+
+        if (exam == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Check question belongs to this exam
+        if (!questionService.questionBelongsToExam(
+                questionId,
+                examId
+        )) {
+            return ResponseEntity.notFound().build();
+        }
+
         question.setExamId(examId);
 
-        return questionService.updateQuestion(
-                questionId,
-                question
-        );
+        Question updatedQuestion =
+                questionService.updateQuestion(
+                        questionId,
+                        question
+                );
+
+        return ResponseEntity.ok(updatedQuestion);
     }
 
     @DeleteMapping("/{examId}/questions/{questionId}")
-    public String deleteQuestion(
+    public ResponseEntity<Void> deleteQuestion(
+            @PathVariable Long examId,
             @PathVariable Long questionId
     ) {
 
-        boolean deleted =
-                questionService.deleteQuestion(questionId);
+        // Check exam exists
+        Exam exam = examService.getExamById(examId);
 
-        if (deleted) {
-            return "Deleted successfully";
+        if (exam == null) {
+            return ResponseEntity.notFound().build();
         }
 
-        return "Question not found";
+        // Check question belongs to this exam
+        if (!questionService.questionBelongsToExam(
+                questionId,
+                examId
+        )) {
+            return ResponseEntity.notFound().build();
+        }
+
+        questionService.deleteQuestion(questionId);
+
+        return ResponseEntity.noContent().build();
     }
 }

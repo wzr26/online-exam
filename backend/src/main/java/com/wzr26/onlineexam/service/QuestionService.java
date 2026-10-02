@@ -131,7 +131,18 @@ public class QuestionService {
 
         return existingQuestion;
     }
+    public boolean questionBelongsToExam(
+        Long questionId,
+        Long examId
+    ) {
+        Question question = getQuestionById(questionId);
 
+    if (question == null) {
+        return false;
+    }
+
+    return question.getExamId().equals(examId);
+    }
     public boolean deleteQuestion(Long id) {
 
         Question question =
