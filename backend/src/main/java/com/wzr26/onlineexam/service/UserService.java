@@ -12,13 +12,33 @@ public class UserService {
     private final List<User> users = new ArrayList<>();
 
     public UserService() {
-        users.add(new User(1L, "dung", "student"));
-        users.add(new User(2L, "teacher", "teacher"));
+        users.add(new User(1L, "dung", "123456","student"));
+        users.add(new User(2L, "teacher", "123456", "teacher"));
     }
 
     // GET all users
     public List<User> getAllUsers() {
         return users;
+    }
+
+    public User login(
+        String username,
+        String password
+) {
+
+    for (User user : users) {
+
+        if (
+                user.getUsername().equals(username)
+                &&
+                user.getPassword().equals(password)
+        ) {
+            return user;
+        }
+
+    }
+
+    return null;
     }
 
     // GET user by ID
@@ -60,6 +80,7 @@ public class UserService {
         }
 
         existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setPassword(updatedUser.getPassword());
         existingUser.setRole(updatedUser.getRole());
 
         return existingUser;

@@ -5,6 +5,7 @@
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/controller/ProfileController.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/controller/UserController.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/model/Exam.java
+/mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/model/LoginRequest.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/model/Question.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/model/User.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/service/ExamService.java

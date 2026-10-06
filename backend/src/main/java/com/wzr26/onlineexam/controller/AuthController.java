@@ -1,28 +1,47 @@
 package com.wzr26.onlineexam.controller;
 
+import com.wzr26.onlineexam.model.LoginRequest;
+import com.wzr26.onlineexam.model.User;
+import com.wzr26.onlineexam.service.UserService;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 public class AuthController {
 
+    private final UserService userService;
+
+    public AuthController(
+            UserService userService
+    ) {
+        this.userService = userService;
+    }
+
     @GetMapping("/")
-public String home() {
-    return "Trang chủ";
-}
-    @GetMapping("/login")
-    public String loginPage() {
-        return "Trang đăng nhập";
+    public String home() {
+        return "Trang chủ";
     }
 
     @PostMapping("/login")
-    public String login(
-            @RequestParam String username,
-            @RequestParam String password
+    public ResponseEntity<?> login(
+            @RequestBody LoginRequest request
     ) {
-        System.out.println("Username: " + username);
-        System.out.println("Password: " + password);
 
-        return "Đã nhận dữ liệu đăng nhập";
+        User user = userService.login(
+                request.getUsername(),
+                request.getPassword()
+        );
+
+        if (user == null) {
+
+            return ResponseEntity
+                    .status(401)
+                    .body("Invalid username or password");
+        }
+
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/register")
@@ -30,4 +49,3 @@ public String home() {
         return "Trang đăng ký";
     }
 }
-
