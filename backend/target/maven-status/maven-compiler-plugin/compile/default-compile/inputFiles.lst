@@ -10,5 +10,6 @@
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/model/Question.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/model/User.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/service/ExamService.java
+/mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/service/JwtService.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/service/QuestionService.java
 /mnt/d/hoc/proj/online-exam/backend/src/main/java/com/wzr26/onlineexam/service/UserService.java
