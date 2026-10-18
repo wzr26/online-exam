@@ -46,17 +46,36 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(
                                 HttpMethod.POST,
                                 "/api/login"
                         ).permitAll()
 
                         .requestMatchers(
-                                "/",
-                                "/login",
-                                "/register"
+                                "/", "/login", "/register"
                         ).permitAll()
 
+                        // Teacher-only: create questions
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/exams/*/questions",
+                                "/api/exams/*/questions/**"
+                        ).hasRole("TEACHER")
+
+                        // Teacher-only: edit questions
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/exams/*/questions/**"
+                        ).hasRole("TEACHER")
+
+                        // Teacher-only: delete questions
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/exams/*/questions/**"
+                        ).hasRole("TEACHER")
+
+                        // All other endpoints require a valid login
                         .anyRequest().authenticated()
                 )
 

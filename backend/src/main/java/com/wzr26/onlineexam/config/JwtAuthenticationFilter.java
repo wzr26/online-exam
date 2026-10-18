@@ -73,6 +73,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             SecurityContextHolder.getContext()
                     .setAuthentication(authentication);
+                    System.out.println(
+                        "JWT authenticated: " + username
+                        + ", role: " + role
+                        + ", authorities: " + authorities
+                );
 
         } catch (JwtException | IllegalArgumentException e) {
             SecurityContextHolder.clearContext();
