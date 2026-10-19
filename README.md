@@ -1,4 +1,4 @@
 Create JWT Key:
-openssl rand -base64 32
-export JWT_SECRET='YOUR_GENERATED_SECRET'
+export JWT_SECRET="$(openssl rand -base64 32)"
 mvn spring-boot:run
+Password: exam_dev_password

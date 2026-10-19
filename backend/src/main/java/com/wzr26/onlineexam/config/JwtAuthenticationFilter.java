@@ -35,6 +35,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
+        System.out.println("Authorization header present: " + (header != null));
+        System.out.println("Authorization starts with Bearer: "
+        + (header != null && header.startsWith("Bearer ")));
 
         // Không có Bearer token: để Security quyết định quyền truy cập.
         if (header == null || !header.startsWith("Bearer ")) {
