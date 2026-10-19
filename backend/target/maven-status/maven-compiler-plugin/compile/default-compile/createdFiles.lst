@@ -6,11 +6,13 @@ com/wzr26/onlineexam/model/LoginRequest.class
 com/wzr26/onlineexam/model/User.class
 com/wzr26/onlineexam/model/LoginResponse.class
 com/wzr26/onlineexam/model/Question.class
+com/wzr26/onlineexam/repository/UserRepository.class
 com/wzr26/onlineexam/service/QuestionService.class
 com/wzr26/onlineexam/config/SecurityConfig.class
 com/wzr26/onlineexam/controller/ExamController.class
 com/wzr26/onlineexam/service/UserService.class
 com/wzr26/onlineexam/controller/ProfileController.class
+com/wzr26/onlineexam/repository/ExamRepository.class
 com/wzr26/onlineexam/service/JwtService.class
 com/wzr26/onlineexam/OnlineExamApplication.class
 com/wzr26/onlineexam/config/LoggingFilter.class

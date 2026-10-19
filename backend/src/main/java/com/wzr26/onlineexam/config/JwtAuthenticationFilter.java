@@ -84,7 +84,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (JwtException | IllegalArgumentException e) {
             SecurityContextHolder.clearContext();
-
+        System.out.println("JWT validation failed: " + e.getMessage());
             response.sendError(
                     HttpServletResponse.SC_UNAUTHORIZED,
                     "Invalid or expired token"

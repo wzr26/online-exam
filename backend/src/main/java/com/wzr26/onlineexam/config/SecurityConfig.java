@@ -3,6 +3,8 @@ package com.wzr26.onlineexam.config;
 
 import com.wzr26.onlineexam.service.JwtService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -39,9 +41,11 @@ public class SecurityConfig {
 
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(
-                                new HttpStatusEntryPoint(
-                                        HttpStatus.UNAUTHORIZED
-                                )
+                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
+                        )
+                        .accessDeniedHandler(
+                                new org.springframework.security.web.access
+                                .AccessDeniedHandlerImpl()
                         )
                 )
 
@@ -53,7 +57,7 @@ public class SecurityConfig {
                         ).permitAll()
 
                         .requestMatchers(
-                                "/", "/login", "/register"
+                                "/", "/login", "/register", "/error"
                         ).permitAll()
 
                         // Teacher-only: create questions
