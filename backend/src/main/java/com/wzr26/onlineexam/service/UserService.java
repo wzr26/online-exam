@@ -1,80 +1,49 @@
 package com.wzr26.onlineexam.service;
 
 import com.wzr26.onlineexam.model.User;
+import com.wzr26.onlineexam.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class UserService {
 
-    private final List<User> users = new ArrayList<>();
+    private final UserRepository userRepository;
 
-    public UserService() {
-        users.add(new User(1L, "dung", "123456","student"));
-        users.add(new User(2L, "teacher", "123456", "teacher"));
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+        seedDefaultUser("dung", "123456", "student");
+        seedDefaultUser("teacher", "123456", "teacher");
     }
 
-    // GET all users
+    private void seedDefaultUser(String username, String password, String role) {
+        if (userRepository.findByUsername(username).isEmpty()) {
+            userRepository.save(new User(null, username, password, role));
+        }
+    }
+
     public List<User> getAllUsers() {
-        return users;
+        return userRepository.findAll();
     }
 
-    public User login(
-        String username,
-        String password
-) {
-
-    for (User user : users) {
-
-        if (
-                user.getUsername().equals(username)
-                &&
-                user.getPassword().equals(password)
-        ) {
-            return user;
-        }
-
+    public User login(String username, String password) {
+        return userRepository.findByUsername(username)
+                .filter(user -> user.getPassword().equals(password))
+                .orElse(null);
     }
 
-    return null;
-    }
-
-    // GET user by ID
     public User getUserById(Long id) {
-
-        for (User user : users) {
-            if (user.getId().equals(id)) {
-                return user;
-            }
-        }
-
-        return null;
+        return userRepository.findById(id).orElse(null);
     }
 
-    // POST create user
     public User createUser(User user) {
-
-        Long newId = 1L;
-
-        for (User existingUser : users) {
-            if (existingUser.getId() >= newId) {
-                newId = existingUser.getId() + 1;
-            }
-        }
-
-        user.setId(newId);
-        users.add(user);
-
-        return user;
+        user.setId(null);
+        return userRepository.save(user);
     }
 
-    // PUT update user
     public User updateUser(Long id, User updatedUser) {
-
         User existingUser = getUserById(id);
-
         if (existingUser == null) {
             return null;
         }
@@ -83,21 +52,15 @@ public class UserService {
         existingUser.setPassword(updatedUser.getPassword());
         existingUser.setRole(updatedUser.getRole());
 
-        return existingUser;
+        return userRepository.save(existingUser);
     }
 
-    // DELETE user
     public boolean deleteUser(Long id) {
-
-        User user = getUserById(id);
-
-        if (user == null) {
+        if (!userRepository.existsById(id)) {
             return false;
         }
 
-        users.remove(user);
-
+        userRepository.deleteById(id);
         return true;
     }
 }
-

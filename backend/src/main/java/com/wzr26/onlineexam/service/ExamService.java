@@ -1,56 +1,46 @@
 package com.wzr26.onlineexam.service;
 
 import com.wzr26.onlineexam.model.Exam;
+import com.wzr26.onlineexam.repository.ExamRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ExamService {
 
-    private final List<Exam> exams = new ArrayList<>();
+    private final ExamRepository examRepository;
 
-    public ExamService() {
-        exams.add(new Exam(1L, "Java Midterm", 60));
-        exams.add(new Exam(2L, "OOP Quiz", 30));
+    public ExamService(ExamRepository examRepository) {
+        this.examRepository = examRepository;
+        seedDefaultExam("Java Midterm", 60);
+        seedDefaultExam("OOP Quiz", 30);
+    }
+
+    private void seedDefaultExam(String title, Integer duration) {
+        boolean exists = examRepository.findAll().stream()
+                .anyMatch(exam -> exam.getTitle().equals(title));
+
+        if (!exists) {
+            examRepository.save(new Exam(null, title, duration));
+        }
     }
 
     public List<Exam> getAllExams() {
-        return exams;
+        return examRepository.findAll();
     }
 
     public Exam getExamById(Long id) {
-
-        for (Exam exam : exams) {
-            if (exam.getId().equals(id)) {
-                return exam;
-            }
-        }
-
-        return null;
+        return examRepository.findById(id).orElse(null);
     }
 
     public Exam createExam(Exam exam) {
-
-        Long newId = 1L;
-
-        for (Exam existingExam : exams) {
-            if (existingExam.getId() >= newId) {
-                newId = existingExam.getId() + 1;
-            }
-        }
-
-        exam.setId(newId);
-        exams.add(exam);
-
-        return exam;
+        exam.setId(null);
+        return examRepository.save(exam);
     }
 
     public Exam updateExam(Long id, Exam updatedExam) {
-
         Exam existingExam = getExamById(id);
-
         if (existingExam == null) {
             return null;
         }
@@ -58,19 +48,15 @@ public class ExamService {
         existingExam.setTitle(updatedExam.getTitle());
         existingExam.setDuration(updatedExam.getDuration());
 
-        return existingExam;
+        return examRepository.save(existingExam);
     }
 
     public boolean deleteExam(Long id) {
-
-        Exam exam = getExamById(id);
-
-        if (exam == null) {
+        if (!examRepository.existsById(id)) {
             return false;
         }
 
-        exams.remove(exam);
-
+        examRepository.deleteById(id);
         return true;
     }
 }
